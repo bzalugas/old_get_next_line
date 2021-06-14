@@ -6,7 +6,7 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 18:57:23 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/06/03 20:06:12 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/06/07 10:14:28 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,20 +69,40 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	size_t	s2_len;
 	char	*new;
 
-	if (!s2)
+	if (!s1 || !s2)
 		return (NULL);
 	s1_len = ft_strlen(s1);
 	s2_len = ft_strlen(s2);
 	if (!(new = (char *)malloc(sizeof(char) * s1_len + s2_len + 1)))
 		return (NULL);
-	if (!s1)
-	{
-		ft_strlcpy(new, s2, s2_len + 1);
-	}
+	ft_strlcpy(new, s1, s1_len + 1);
+	ft_strlcat(new, s2, s1_len + s2_len + 1);
+	return (new);
+}
+
+char	*ft_strdup(const char *s1)
+{
+	char	*copy;
+	size_t	len;
+
+	len = ft_strlen(s1);
+	if (!(copy = (char *)malloc(sizeof(char) * len + 1)))
+		return (NULL);
+	ft_strlcpy(copy, s1, len + 1);
+	return (copy);
+}
+
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
+	char	*new;
+
+	if (!s)
+		return (NULL);
+	if (!(new = malloc(sizeof(char) * len + 1)))
+		return (NULL);
+	if (start >= ft_strlen(s))
+		ft_strlcpy(new, "\0", 1);
 	else
-	{
-		ft_strlcpy(new, s1, s1_len + 1);
-		ft_strlcat(new, s2, s1_len + s2_len + 1);
-	}
+		ft_strlcpy(new, &s[start], len + 1);
 	return (new);
 }
