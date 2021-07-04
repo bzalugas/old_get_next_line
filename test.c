@@ -16,11 +16,9 @@ int find(char c, char *str, size_t start)
     return i;
 }
 
-int main(int argc, char **argv)
+int main()
 {
-    char *str = argv[1];
-    char c = argv[2][0];
-    size_t start = atoi(argv[3]);
-    int index = find(c, str, start);
-    printf("%d\n", index);
+    char buff[10000000];
+
+    buff[0] = '\0';
 }

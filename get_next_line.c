@@ -6,7 +6,7 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 18:57:41 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/06/21 21:50:28 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/07/04 23:22:00 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,12 @@ int     get_the_line(char **line, char **text, int end_line)
         end_line = ft_strlen(*text);*/
 //    printf("end line : %d\n", end_line);
 //    printf("len : %lu\n", ft_strlen(*text));
+    if (end_line == -1)
+    {
+        *line = ft_substr(*text, 0, ft_strlen(*text));
+        free(*text);
+        return (0);
+    }
     *line = ft_substr(*text, 0, end_line);
     *text = ft_substr(*text, end_line + 1, ft_strlen(*text));
     return (1);
@@ -57,7 +63,6 @@ int     get_next_line(int fd, char **line)
         return (get_the_line(line, &text, end_line));
     while ((result = read(fd, buff, BUFFER_SIZE)) > 0)
     {
-        //printf("boucle %d\n", nb++);
         buff[result] = '\0';
         if (text == NULL)
             if (!(text = malloc(sizeof(char) * BUFFER_SIZE + 1)))
@@ -66,32 +71,15 @@ int     get_next_line(int fd, char **line)
         if ((end_line = find('\n', text, 0)) != -1)
             return (get_the_line(line, &text, end_line));
     }
-    if (!text)
+    return (get_the_line(line, &text, -1));
+/*    if (text)
     {
         *line = ft_strdup(text);
         free(text);
         return (result);
     }
     *line = ft_strdup("");
-    return (result);
-//    printf("text[0] = %c\n", text[0]);
-
-/*    if (!(text && text[0] == '\0' && result < BUFFER_SIZE))
-        return (1);
-    free(text);
-    return (0); */
-
-//    if (text && text[0] == '\0' && result < BUFFER_SIZE)
-/*    if (text && text[0] == '\0')
-    {
-        if (read(fd, buff, 1) == 0)
-        {
-            free(text);
-            return (0);
-        }
-        text = ft_strjoin(text, buff);
-    }
-    return (1);*/
+    return (result);*/
 }
 
 #include <fcntl.h>
@@ -112,11 +100,10 @@ int main(int argc, char **argv)
     char *name = argv[1];
     int fd = open(name, O_RDONLY);
     char *line;
-    int result = 1;
+//    int result = 1;
     printf("Contenu de %s : \n\n", name);
-    while (result > 0)
+    while (get_next_line(fd, &line))
     {
-        result = get_next_line(fd, &line);
 //        printf("next line : %s(result = %d)\n", line, result);
         printf("%s\n", line);
     }
