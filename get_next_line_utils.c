@@ -6,7 +6,7 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 18:57:23 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/06/18 14:42:05 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/07/05 15:08:33 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 	return (ft_strlen(src));
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin_free(char *s1, char const *s2)
 {
 	size_t	s1_len;
 	size_t	s2_len;
@@ -77,6 +77,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		return (NULL);
 	ft_strlcpy(new, s1, s1_len + 1);
 	ft_strlcat(new, s2, s1_len + s2_len + 1);
+	free(s1);
 	return (new);
 }
 
@@ -104,5 +105,21 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		ft_strlcpy(new, "\0", 1);
 	else
 		ft_strlcpy(new, &s[start], len + 1);
+	return (new);
+}
+
+char	*ft_substr_free(char *s, unsigned int start, size_t len)
+{
+	char	*new;
+
+	if (!s)
+		return (NULL);
+	if (!(new = malloc(sizeof(char) * len + 1)))
+		return (NULL);
+	if (start >= ft_strlen(s))
+		ft_strlcpy(new, "\0", 1);
+	else
+		ft_strlcpy(new, &s[start], len + 1);
+	free(s);
 	return (new);
 }

@@ -6,17 +6,21 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 18:57:41 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/07/04 23:22:00 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/07/05 15:41:21 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include "leaks_tester.h"
 //#include "leaks_tester.h"
 #ifndef BUFFER_SIZE
 # define BUFFER_SIZE 0
 #endif
 
-//extern t_list *liste;
+extern t_list *liste;
+extern int nb_malloc;
+extern int nb_free;
+
 
 int     find(char c, char *str, size_t start)
 {
@@ -46,7 +50,7 @@ int     get_the_line(char **line, char **text, int end_line)
         return (0);
     }
     *line = ft_substr(*text, 0, end_line);
-    *text = ft_substr(*text, end_line + 1, ft_strlen(*text));
+    *text = ft_substr_free(*text, end_line + 1, ft_strlen(*text));
     return (1);
 }
 
@@ -67,7 +71,7 @@ int     get_next_line(int fd, char **line)
         if (text == NULL)
             if (!(text = malloc(sizeof(char) * BUFFER_SIZE + 1)))
                 return (-1);
-        text = ft_strjoin(text, buff); //modifier le strjoin pour qu'il fonctionne meme si text == NULL
+        text = ft_strjoin_free(text, buff); //modifier le strjoin pour qu'il fonctionne meme si text == NULL
         if ((end_line = find('\n', text, 0)) != -1)
             return (get_the_line(line, &text, end_line));
     }
@@ -93,7 +97,6 @@ void delete(void *content)
 {
     content = NULL;
 }
-
 int main(int argc, char **argv)
 {
     (void)argc;
@@ -102,18 +105,24 @@ int main(int argc, char **argv)
     char *line;
 //    int result = 1;
     printf("Contenu de %s : \n\n", name);
-    while (get_next_line(fd, &line))
+	if (!fd)
+		return 1;
+	while (get_next_line(fd, &line))
     {
 //        printf("next line : %s(result = %d)\n", line, result);
         printf("%s\n", line);
+        free(line);
     }
-    free(line);
+    if (line)
+        free(line);
     close(fd);
-/*    printf("adresses restantes : \n");
+    printf("nb malloc : %d\n", nb_malloc);
+    printf("nb free : %d\n", nb_free);
+    printf("adresses non liberees : \n");
     void (*aff)(void *);
     aff = &afficher;
     ft_lstiter(liste, aff);
     void (*del)(void *);
     del = &delete;
-    ft_lstclear(&liste, del);*/
+    ft_lstclear(&liste, del);
 }

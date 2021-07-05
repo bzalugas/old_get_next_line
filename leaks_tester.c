@@ -6,11 +6,12 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 13:33:17 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/06/18 13:50:44 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/07/05 15:20:01 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "leaks_tester.h"
+
 
 t_list *liste = NULL;
 
@@ -120,7 +121,8 @@ int     check_delete(t_list *lst, void *p)
 		return 0;
 	return 1;
 }
-
+int nb_malloc = 0;
+int nb_free = 0;
 void *my_malloc(size_t size, const char *file, int line, const char *function)
 {
 	void *p = malloc(size);
@@ -129,12 +131,14 @@ void *my_malloc(size_t size, const char *file, int line, const char *function)
 	printf("Malloc : %s, line %d, function %s : %p[%lu]\n", file, line, function, p, size);
 	t_list *el = ft_lstnew(p);
 	ft_lstadd_back(&liste, el);
+	nb_malloc++;
 	return p;
 }
 
 void my_free(void *p, const char *file, int line, const char *function)
 {
 	printf("Free : %s, line %d, function %s : %p[%lu]\n", file, line, function, p, sizeof(p));
-	if (check_delete(liste, p) == 0)
-		free(p);
+	nb_free++;
+	check_delete(liste, p);
+	free(p);
 }
