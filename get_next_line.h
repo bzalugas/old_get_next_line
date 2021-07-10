@@ -6,7 +6,7 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 18:57:46 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/07/05 15:08:46 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/07/10 19:43:22 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,6 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdio.h>
-# include "leaks_tester.h"
-
-#define malloc(X) my_malloc(X, __FILE__, __LINE__, __FUNCTION__)
-#define free(P) my_free(P, __FILE__, __LINE__, __FUNCTION__)
 
 size_t  ft_strlen(const char *s);
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);

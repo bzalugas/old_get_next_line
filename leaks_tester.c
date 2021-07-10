@@ -6,12 +6,11 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 13:33:17 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/07/05 15:20:01 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/07/10 19:45:33 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "leaks_tester.h"
-
 
 t_list *liste = NULL;
 
@@ -141,4 +140,48 @@ void my_free(void *p, const char *file, int line, const char *function)
 	nb_free++;
 	check_delete(liste, p);
 	free(p);
+}
+
+
+#include <fcntl.h>
+#include "get_next_line.h"
+#define malloc(X) my_malloc(X, __FILE__, __LINE__, __FUNCTION__)
+#define free(P) my_free(P, __FILE__, __LINE__, __FUNCTION__)
+void afficher(void *content)
+{
+    printf("%p[%lu]\n", content, sizeof(content));
+}
+
+void delete(void *content)
+{
+    content = NULL;
+}
+int main(int argc, char **argv)
+{
+    (void)argc;
+    char *name = argv[1];
+    int fd = open(name, O_RDONLY);
+    char *line;
+//    int result = 1;
+    printf("Contenu de %s : \n\n", name);
+	if (!fd)
+		return 1;
+	while (get_next_line(fd, &line))
+    {
+//        printf("next line : %s(result = %d)\n", line, result);
+        printf("%s\n", line);
+        free(line);
+    }
+    if (line)
+        free(line);
+    close(fd);
+    printf("nb malloc : %d\n", nb_malloc);
+    printf("nb free : %d\n", nb_free);
+    printf("adresses non liberees : \n");
+    void (*aff)(void *);
+    aff = &afficher;
+    ft_lstiter(liste, aff);
+    void (*del)(void *);
+    del = &delete;
+    ft_lstclear(&liste, del);
 }

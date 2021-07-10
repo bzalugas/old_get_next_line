@@ -6,7 +6,7 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 18:57:23 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/07/05 15:08:33 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/07/10 20:38:31 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ size_t  ft_strlen(const char *s)
 	size_t i;
 
 	i = 0;
-	while (s[i])
+	while (s && s[i])
 		i++;
 	return (i);
 }
@@ -69,15 +69,20 @@ char	*ft_strjoin_free(char *s1, char const *s2)
 	size_t	s2_len;
 	char	*new;
 
-	if (!s1 || !s2)
+	if (!s2)
 		return (NULL);
 	s1_len = ft_strlen(s1);
 	s2_len = ft_strlen(s2);
 	if (!(new = (char *)malloc(sizeof(char) * s1_len + s2_len + 1)))
 		return (NULL);
-	ft_strlcpy(new, s1, s1_len + 1);
-	ft_strlcat(new, s2, s1_len + s2_len + 1);
-	free(s1);
+	if (s1)
+	{
+		ft_strlcpy(new, s1, s1_len + 1);
+		ft_strlcat(new, s2, s1_len + s2_len + 1);
+		free(s1);
+	}
+	else
+		ft_strlcpy(new, s2, s2_len + 1);
 	return (new);
 }
 
