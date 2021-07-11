@@ -6,12 +6,11 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 18:57:41 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/07/10 23:03:52 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/07/12 00:48:54 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include "leaks_tester.h"
 
 #ifndef BUFFER_SIZE
 # define BUFFER_SIZE 0
@@ -63,23 +62,4 @@ int     get_next_line(int fd, char **line)
 			return (get_the_line(line, &text, end_line));
 	}
 	return (get_the_line(line, &text, -1));
-}
-
-#include <fcntl.h>
-
-int main(int argc, char **argv)
-{
-	(void)argc;
-	char *name = argv[1];
-	int fd = open(name, O_RDONLY);
-	char *line;
-	printf("contenu de %s : \n\n", name);
-	while (get_next_line(fd, &line))
-	{
-		printf("%s\n", line);
-		free(line);
-	}
-	if (line)
-		free(line);
-	close(fd);
 }
