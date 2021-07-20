@@ -6,60 +6,142 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 18:57:41 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/07/12 00:48:54 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/07/20 16:14:04 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include "leaks_tester.h"
 
 #ifndef BUFFER_SIZE
 # define BUFFER_SIZE 0
 #endif
 
-int     find(char c, char *str, size_t start)
+int	find(char c, char *str, size_t start)
 {
-	int i;
+	int	i;
 
 	if (!str || start > ft_strlen(str))
-		return -1;
+		return (-1);
 	i = start;
 	while (str[i] && str[i] != c)
 		i++;
 	if (!str[i])
-		return -1;
-	return i;
+		return (-1);
+	return (i);
 }
 
-int     get_the_line(char **line, char **text, int end_line)
+int	get_the_line(char **line, char **text, int end_line)
 {
 	if (end_line == -1)
 	{
 		*line = ft_substr(*text, 0, ft_strlen(*text));
+		if (**text == 0)
+		{
+			free(*text);
+			return (0);
+		}
+	}
+	if (end_line >= 0)
+		*line = ft_substr(*text, 0, end_line);
+	else
+		end_line = ft_strlen(*text);
+	*text = ft_substr_free(*text, end_line + 1, ft_strlen(*text));
+	return (1);
+}
+
+int	get_the_line2(char **line, char **text, int last)
+{
+	int	end_line;
+
+	if (last && **text == 0)
+	{
+		*line = ft_strdup("\0");
 		free(*text);
 		return (0);
 	}
+	end_line = find('\n', *text, 0);
+	if (end_line == -1)
+		end_line = ft_strlen(*text);
 	*line = ft_substr(*text, 0, end_line);
 	*text = ft_substr_free(*text, end_line + 1, ft_strlen(*text));
 	return (1);
 }
 
-int     get_next_line(int fd, char **line)
+int	get_next_line(int fd, char **line)
 {
-	char        buff[BUFFER_SIZE + 1];
-	static char *text = NULL;
-	int         result;
-	int         end_line;
+	char		buff[BUFFER_SIZE + 1];
+	static char	*text = NULL;
+	int			result;
+	int			end_line;
 
 	if (fd < 0 || !line || BUFFER_SIZE < 1 || read(fd, buff, 0) < 0)
 		return (-1);
-	if (text && (end_line = find('\n', text, 0)) != -1)
-		return (get_the_line(line, &text, end_line));
-	while ((result = read(fd, buff, BUFFER_SIZE)) > 0)
+	if (text)
+	{
+		end_line = find('\n', text, 0);
+		if (end_line != -1)
+//			return (get_the_line(line, &text, end_line));
+			return (get_the_line2(line, &text, 0));
+	}
+	result = read(fd, buff, BUFFER_SIZE);
+	while (result > 0)
 	{
 		buff[result] = '\0';
 		text = ft_strjoin_free(text, buff);
-		if ((end_line = find('\n', text, 0)) != -1)
-			return (get_the_line(line, &text, end_line));
+		end_line = find('\n', text, 0);
+		if (end_line != -1 || result < BUFFER_SIZE)
+			return (get_the_line2(line, &text, 0));
+//			return (get_the_line(line, &text, end_line));
+		result = read(fd, buff, BUFFER_SIZE);
+//		if (result == 0)
+//			return (get_the_line(line, &text, ft_strlen(text)));
 	}
-	return (get_the_line(line, &text, -1));
+	return (get_the_line2(line, &text, 1));
+//	return (get_the_line(line, &text, -1));
+}
+
+#include <fcntl.h>
+#include <sys/errno.h>
+
+int	main(int argc, char **argv)
+{
+	char	*name;
+	int		fd;
+	char	*line;
+	int		result;
+	int		nb;
+
+	(void)argc;
+	name = argv[1];
+	fd = open(name, O_RDONLY);
+	if (fd < 0)
+		return (-1);
+	printf("contenu de %s : \n\n", name);
+	nb = 1;
+	while ((result = get_next_line(fd, &line)) > 0)
+	{
+		printf("l%d : %s\n", nb++, line);
+		if (line)
+			free(line);
+	}
+	if (line)
+		free(line);
+/*	result = 1;
+	already = 0;
+	while (result)
+	{
+		result = get_next_line(fd, &line);
+		if (!already || result > 0)
+			{
+				printf("%s\n", line);
+				if (result == 0)
+					already++;
+			}
+		if (line)
+			free(line);
+	}*/
+//	if (line)
+//		free(line);
+	close(fd);
 }
