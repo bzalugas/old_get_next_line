@@ -6,7 +6,7 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 18:57:41 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/07/20 16:14:04 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/07/20 19:13:49 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ int	get_the_line2(char **line, char **text, int last)
 
 	if (last && **text == 0)
 	{
-		*line = ft_strdup("\0");
-		free(*text);
+		*line = ft_substr_free(*text, 0, 1);
+//		free(*text);
 		return (0);
 	}
 	end_line = find('\n', *text, 0);
