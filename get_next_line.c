@@ -6,12 +6,11 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 18:57:41 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/07/24 17:56:07 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/07/24 18:35:34 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include "leaks_tester.h"
 
 #ifndef BUFFER_SIZE
 # define BUFFER_SIZE 0
@@ -71,53 +70,4 @@ int	get_next_line(int fd, char **line)
 		result = read(fd, buff, BUFFER_SIZE);
 	}
 	return (get_the_line(line, &text, -1));
-}
-
-#include <fcntl.h>
-#include <sys/errno.h>
-
-int	main(int argc, char **argv)
-{
-	char	*name;
-	int		fd;
-	char	*line;
-	int		result;
-	int		nb;
-
-	if (argc == 1)
-		fd = 0;
-	else
-	{
-		name = argv[1];
-		fd = open(name, O_RDONLY);
-		if (fd < 0)
-			return (-1);
-//		printf("contenu de %s : \n\n", name);
-	}
-	nb = 1;
-	while ((result = get_next_line(fd, &line)) > 0)
-	{
-		printf("%s\n", line);
-		if (line)
-			free(line);
-	}
-	if (line)
-		free(line);
-/*	result = 1;
-	already = 0;
-	while (result)
-	{
-		result = get_next_line(fd, &line);
-		if (!already || result > 0)
-			{
-				printf("%s\n", line);
-				if (result == 0)
-					already++;
-			}
-		if (line)
-			free(line);
-	}*/
-//	if (line)
-//		free(line);
-	close(fd);
 }
