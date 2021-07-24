@@ -6,7 +6,7 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 18:57:41 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/07/24 17:22:53 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/07/24 18:01:41 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,13 @@ int	find(char c, char *str, size_t start)
 	return (i);
 }
 
-int	get_the_line(char **line, char **text, int last)
+int	get_the_line(char **line, char **text, int end_line)
 {
-	int	end_line;
-
-	if (last && **text == 0)
+	if (*text == 0 || **text == 0)
 	{
-		*line = ft_substr_free(*text, 0, 0);
+		*line = ft_substr_free(*text, 0, 1);
 		return (0);
 	}
-	end_line = find('\n', *text, 0);
 	if (end_line == -1)
 		end_line = ft_strlen(*text);
 	*line = ft_substr(*text, 0, end_line);
@@ -60,7 +57,7 @@ int	get_next_line(int fd, char **line)
 	{
 		end_line = find('\n', text, 0);
 		if (end_line != -1)
-			return (get_the_line(line, &text, 0));
+			return (get_the_line(line, &text, end_line));
 	}
 	result = read(fd, buff, BUFFER_SIZE);
 	while (result > 0)
@@ -69,8 +66,8 @@ int	get_next_line(int fd, char **line)
 		text = ft_strjoin_free(text, buff);
 		end_line = find('\n', text, 0);
 		if (end_line != -1 || result < BUFFER_SIZE)
-			return (get_the_line(line, &text, 0));
+			return (get_the_line(line, &text, end_line));
 		result = read(fd, buff, BUFFER_SIZE);
 	}
-	return (get_the_line(line, &text, 1));
+	return (get_the_line(line, &text, -1));
 }
