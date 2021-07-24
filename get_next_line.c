@@ -6,7 +6,7 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 18:57:41 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/07/20 19:13:49 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/07/24 17:56:07 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,34 +33,11 @@ int	find(char c, char *str, size_t start)
 
 int	get_the_line(char **line, char **text, int end_line)
 {
-	if (end_line == -1)
-	{
-		*line = ft_substr(*text, 0, ft_strlen(*text));
-		if (**text == 0)
-		{
-			free(*text);
-			return (0);
-		}
-	}
-	if (end_line >= 0)
-		*line = ft_substr(*text, 0, end_line);
-	else
-		end_line = ft_strlen(*text);
-	*text = ft_substr_free(*text, end_line + 1, ft_strlen(*text));
-	return (1);
-}
-
-int	get_the_line2(char **line, char **text, int last)
-{
-	int	end_line;
-
-	if (last && **text == 0)
+	if (*text == 0 || **text == 0)
 	{
 		*line = ft_substr_free(*text, 0, 1);
-//		free(*text);
 		return (0);
 	}
-	end_line = find('\n', *text, 0);
 	if (end_line == -1)
 		end_line = ft_strlen(*text);
 	*line = ft_substr(*text, 0, end_line);
@@ -81,8 +58,7 @@ int	get_next_line(int fd, char **line)
 	{
 		end_line = find('\n', text, 0);
 		if (end_line != -1)
-//			return (get_the_line(line, &text, end_line));
-			return (get_the_line2(line, &text, 0));
+			return (get_the_line(line, &text, end_line));
 	}
 	result = read(fd, buff, BUFFER_SIZE);
 	while (result > 0)
@@ -91,14 +67,10 @@ int	get_next_line(int fd, char **line)
 		text = ft_strjoin_free(text, buff);
 		end_line = find('\n', text, 0);
 		if (end_line != -1 || result < BUFFER_SIZE)
-			return (get_the_line2(line, &text, 0));
-//			return (get_the_line(line, &text, end_line));
+			return (get_the_line(line, &text, end_line));
 		result = read(fd, buff, BUFFER_SIZE);
-//		if (result == 0)
-//			return (get_the_line(line, &text, ft_strlen(text)));
 	}
-	return (get_the_line2(line, &text, 1));
-//	return (get_the_line(line, &text, -1));
+	return (get_the_line(line, &text, -1));
 }
 
 #include <fcntl.h>
@@ -112,16 +84,20 @@ int	main(int argc, char **argv)
 	int		result;
 	int		nb;
 
-	(void)argc;
-	name = argv[1];
-	fd = open(name, O_RDONLY);
-	if (fd < 0)
-		return (-1);
-	printf("contenu de %s : \n\n", name);
+	if (argc == 1)
+		fd = 0;
+	else
+	{
+		name = argv[1];
+		fd = open(name, O_RDONLY);
+		if (fd < 0)
+			return (-1);
+//		printf("contenu de %s : \n\n", name);
+	}
 	nb = 1;
 	while ((result = get_next_line(fd, &line)) > 0)
 	{
-		printf("l%d : %s\n", nb++, line);
+		printf("%s\n", line);
 		if (line)
 			free(line);
 	}
