@@ -6,13 +6,16 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 13:33:17 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/07/10 19:45:33 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/07/25 12:15:47 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#define LEAKS_MACROS
 #include "leaks_tester.h"
+#include <fcntl.h>
+#include "get_next_line.h"
 
-t_list *liste = NULL;
+t_list *g_liste = NULL;
 
 t_list	*ft_lstnew(void *content)
 {
@@ -104,7 +107,7 @@ int     check_delete(t_list *lst, void *p)
 		if (ft_memcmp(tmp->content, p, sizeof(p)) == 0)
 		{
 			if (ft_memcmp(prev, tmp, sizeof(lst)) == 0)
-				liste = tmp->next;
+				g_liste = tmp->next;
 			else
 				prev->next = tmp->next;
 			stop = 1;
@@ -129,7 +132,7 @@ void *my_malloc(size_t size, const char *file, int line, const char *function)
 		return NULL;
 	printf("Malloc : %s, line %d, function %s : %p[%lu]\n", file, line, function, p, size);
 	t_list *el = ft_lstnew(p);
-	ft_lstadd_back(&liste, el);
+	ft_lstadd_back(&g_liste, el);
 	nb_malloc++;
 	return p;
 }
@@ -138,15 +141,13 @@ void my_free(void *p, const char *file, int line, const char *function)
 {
 	printf("Free : %s, line %d, function %s : %p[%lu]\n", file, line, function, p, sizeof(p));
 	nb_free++;
-	check_delete(liste, p);
+	check_delete(g_liste, p);
 	free(p);
 }
 
-
-#include <fcntl.h>
-#include "get_next_line.h"
 #define malloc(X) my_malloc(X, __FILE__, __LINE__, __FUNCTION__)
 #define free(P) my_free(P, __FILE__, __LINE__, __FUNCTION__)
+
 void afficher(void *content)
 {
     printf("%p[%lu]\n", content, sizeof(content));
@@ -158,19 +159,20 @@ void delete(void *content)
 }
 int main(int argc, char **argv)
 {
-    (void)argc;
     char *name = argv[1];
     int fd = open(name, O_RDONLY);
     char *line;
-//    int result = 1;
+
+    (void)argc;
     printf("Contenu de %s : \n\n", name);
 	if (!fd)
 		return 1;
 	while (get_next_line(fd, &line))
     {
-//        printf("next line : %s(result = %d)\n", line, result);
+        printf("next line : %s\n", line);
         printf("%s\n", line);
         free(line);
+        line = NULL;
     }
     if (line)
         free(line);
@@ -180,8 +182,8 @@ int main(int argc, char **argv)
     printf("adresses non liberees : \n");
     void (*aff)(void *);
     aff = &afficher;
-    ft_lstiter(liste, aff);
+    ft_lstiter(g_liste, aff);
     void (*del)(void *);
     del = &delete;
-    ft_lstclear(&liste, del);
+    ft_lstclear(&g_liste, del);
 }

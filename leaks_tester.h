@@ -6,12 +6,12 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 13:35:13 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/07/05 14:36:34 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/07/25 12:13:51 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEAKS_TESTER_H_
-# define LEAKS_TESTER_H_
+#ifndef LEAKS_TESTER_H
+# define LEAKS_TESTER_H
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdio.h>
@@ -33,6 +33,10 @@ int     check_delete(t_list *lst, void *p);
 void    *my_malloc(size_t size, const char *file, int line, const char *function);
 void    my_free(void *p, const char *file, int line, const char *function);
 
-
+# ifndef LEAKS_MACROS
+#  define LEAKS_MACROS
+#  define malloc(X) my_malloc(X, __FILE__, __LINE__, __FUNCTION__)
+#  define free(P) my_free(P, __FILE__, __LINE__, __FUNCTION__)
+# endif
 
 #endif
