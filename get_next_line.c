@@ -6,15 +6,11 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 18:57:41 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/07/24 18:01:41 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/07/25 18:18:20 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-#ifndef BUFFER_SIZE
-# define BUFFER_SIZE 0
-#endif
 
 int	find(char c, char *str, size_t start)
 {
