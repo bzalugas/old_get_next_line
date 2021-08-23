@@ -130,6 +130,9 @@ flycheck_*.el
 # network security
 /network-security.data
 
+# testers
+42TESTERS-GNL
+gnlTester
 
 # End of https://www.toptal.com/developers/gitignore/api/emacs,c++,c
 
