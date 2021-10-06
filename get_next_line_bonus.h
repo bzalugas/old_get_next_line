@@ -6,7 +6,7 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/26 10:32:45 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/08/23 13:59:36 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/09/29 19:13:49 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,12 @@
 #  define BUFFER_SIZE 0
 # endif
 
-#include <stdio.h>
+# define MAX_FD 65536
 
-typedef struct		s_gnlfile
-{
-	int					fd;
-	char				*text;
-	struct s_gnlfile	*next;
-}					t_gnlfile;
+#include <stdio.h> //to remove
 
 size_t		ft_strlen(const char *s);
 int			ft_find_char(char c, char *str);
-t_gnlfile	*get_gnlfile(t_gnlfile **first, int fd);
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
+size_t		ft_strlcpy(char *dst, const char *src, size_t dstsize);
 
 #endif

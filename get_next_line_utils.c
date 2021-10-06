@@ -6,7 +6,7 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 18:57:23 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/08/23 15:31:48 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/09/29 18:15:10 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,13 @@ char	*ft_substr_free(char *s, unsigned int start, size_t len, int to_free)
 		return (NULL);
 	i = 0;
 	if (start < ft_strlen(s))
+	{
 		while (s[start + i] && i < len)
 		{
 			new[i] = s[start + i];
 			i++;
 		}
+	}
 	new[i] = '\0';
 	if (s && to_free)
 		free(s);

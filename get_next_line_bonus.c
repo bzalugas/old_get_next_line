@@ -6,31 +6,20 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/26 10:31:59 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/08/23 13:55:20 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/09/29 19:36:22 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-int get_the_line(char **text, char **line, int end_line)
+char	*get_next_line(int fd)
 {
+    static char *fds[MAX_FD];
+    char        *buf;
 
-}
+    buf = malloc(sizeof(char) * BUFFER_SIZE + 1);
+    if (fd < 0 || read(fd, 0, 0) < 0 || BUFFER_SIZE < 1 || !buf)
+        return (NULL);
+    if (fds[fd] && )
 
-int get_next_line(int fd, char **line)
-{
-    static t_gnlfile    *files = NULL;
-    t_gnlfile           *file;
-    char                buff[BUFFER_SIZE + 1];
-    int                 end_line;
-
-    if (fd < 0 || !line || read(fd, buff, 0) < 0)
-        return (-1);
-    file = get_gnlfile(&files, fd);
-    if (file->text)
-    {
-        end_line = ft_find_char('\n', file->text);
-        if (end_line != -1)
-
-    }
 }
