@@ -6,7 +6,7 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 18:57:23 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/09/29 18:15:10 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/10/09 19:05:19 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int		ft_find_char(char c, char *str, size_t start)
 	return (i);
 }
 
-char	*ft_strjoin_free(char *s1, char const *s2, int to_free)
+char	*ft_strjoin_free(char *s1, char *s2, int free_s1, int free_s2)
 {
 	size_t	len1;
 	size_t	len2;
@@ -57,12 +57,14 @@ char	*ft_strjoin_free(char *s1, char const *s2, int to_free)
 	if (i < 0)
 		i = 0;
 	new[len1 + i] = '\0';
-	if (s1 && to_free)
+	if (free_s1 && s1)
 		free(s1);
+	if (free_s2 && s2)
+		free(s2);
 	return (new);
 }
 
-char	*ft_substr_free(char *s, unsigned int start, size_t len, int to_free)
+char	*ft_substr_free(char *s, unsigned int start, size_t len, int free_s)
 {
 	char	*new;
 	size_t	i;
@@ -82,7 +84,7 @@ char	*ft_substr_free(char *s, unsigned int start, size_t len, int to_free)
 		}
 	}
 	new[i] = '\0';
-	if (s && to_free)
+	if (free_s && s)
 		free(s);
 	return (new);
 }

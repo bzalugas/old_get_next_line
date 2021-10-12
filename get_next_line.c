@@ -6,7 +6,7 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 18:57:41 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/08/23 15:39:16 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/10/12 17:16:38 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@ char	*get_the_line(char **text, int end_line)
 	if (!*text || !**text)
 	{
 		if (*text)
+		{
 			free(*text);
+			*text = NULL;
+		}
 		return (NULL);
 	}
 	if (end_line == -1)
@@ -31,29 +34,27 @@ char	*get_the_line(char **text, int end_line)
 
 char	*get_next_line(int fd)
 {
-	char		buff[BUFFER_SIZE + 1];
+	char		*buff;
 	static char	*text = NULL;
-	int			result;
 	int			end_line;
+	int			result;
 
-	if (fd < 0 || BUFFER_SIZE < 1 || read(fd, buff, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE < 1 || read(fd, 0, 0) < 0)
 		return (NULL);
-	if (text)
-	{
-		end_line = ft_find_char('\n', text, 0);
-		if (end_line != -1)
-			return (get_the_line(&text, end_line));
-	}
-	result = read(fd, buff, BUFFER_SIZE);
-	while (result > 0)
+	buff = malloc(sizeof(char) * BUFFER_SIZE + 1);
+	if (!buff)
+		return (NULL);
+	end_line = ft_find_char('\n', text, 0); //Si !text alors end_line = -1
+	if (end_line == -1)
+		result = read(fd, buff, BUFFER_SIZE);
+	while (end_line == -1 && result > 0)
 	{
 		buff[result] = '\0';
-		text = ft_strjoin_free(text, buff, 1);
+		text = ft_strjoin_free(text, buff, 1, 0);
 		end_line = ft_find_char('\n', text, 0);
-		if (end_line != -1 || result < BUFFER_SIZE) //verifier condition en fct
-													//du cpt attendu
-			return (get_the_line(&text, end_line));
-		result = read(fd, buff, BUFFER_SIZE);
+		if (end_line == -1)
+			result = read(fd, buff, BUFFER_SIZE);
 	}
-	return (get_the_line(&text, -1));
+	free(buff);
+	return (get_the_line(&text, end_line));
 }
