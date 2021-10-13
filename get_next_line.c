@@ -6,7 +6,7 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 18:57:41 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/10/12 17:16:38 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/10/13 15:13:29 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	*get_next_line(int fd)
 	buff = malloc(sizeof(char) * BUFFER_SIZE + 1);
 	if (!buff)
 		return (NULL);
-	end_line = ft_find_char('\n', text, 0); //Si !text alors end_line = -1
+	end_line = ft_find_char('\n', text, 0);
 	if (end_line == -1)
 		result = read(fd, buff, BUFFER_SIZE);
 	while (end_line == -1 && result > 0)
