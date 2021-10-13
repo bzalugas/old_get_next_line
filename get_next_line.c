@@ -6,64 +6,55 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 18:57:41 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/07/25 18:18:20 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/10/13 15:13:29 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	find(char c, char *str, size_t start)
+char	*get_the_line(char **text, int end_line)
 {
-	int	i;
+	char	*line;
 
-	if (!str || start > ft_strlen(str))
-		return (-1);
-	i = start;
-	while (str[i] && str[i] != c)
-		i++;
-	if (!str[i])
-		return (-1);
-	return (i);
-}
-
-int	get_the_line(char **line, char **text, int end_line)
-{
-	if (*text == 0 || **text == 0)
+	if (!*text || !**text)
 	{
-		*line = ft_substr_free(*text, 0, 1);
-		return (0);
+		if (*text)
+		{
+			free(*text);
+			*text = NULL;
+		}
+		return (NULL);
 	}
 	if (end_line == -1)
 		end_line = ft_strlen(*text);
-	*line = ft_substr(*text, 0, end_line);
-	*text = ft_substr_free(*text, end_line + 1, ft_strlen(*text));
-	return (1);
+	line = ft_substr_free(*text, 0, end_line + 1, 0);
+	*text = ft_substr_free(*text, end_line + 1, ft_strlen(*text), 1);
+	return (line);
 }
 
-int	get_next_line(int fd, char **line)
+char	*get_next_line(int fd)
 {
-	char		buff[BUFFER_SIZE + 1];
+	char		*buff;
 	static char	*text = NULL;
-	int			result;
 	int			end_line;
+	int			result;
 
-	if (fd < 0 || !line || BUFFER_SIZE < 1 || read(fd, buff, 0) < 0)
-		return (-1);
-	if (text)
-	{
-		end_line = find('\n', text, 0);
-		if (end_line != -1)
-			return (get_the_line(line, &text, end_line));
-	}
-	result = read(fd, buff, BUFFER_SIZE);
-	while (result > 0)
+	if (fd < 0 || BUFFER_SIZE < 1 || read(fd, 0, 0) < 0)
+		return (NULL);
+	buff = malloc(sizeof(char) * BUFFER_SIZE + 1);
+	if (!buff)
+		return (NULL);
+	end_line = ft_find_char('\n', text, 0);
+	if (end_line == -1)
+		result = read(fd, buff, BUFFER_SIZE);
+	while (end_line == -1 && result > 0)
 	{
 		buff[result] = '\0';
-		text = ft_strjoin_free(text, buff);
-		end_line = find('\n', text, 0);
-		if (end_line != -1 || result < BUFFER_SIZE)
-			return (get_the_line(line, &text, end_line));
-		result = read(fd, buff, BUFFER_SIZE);
+		text = ft_strjoin_free(text, buff, 1, 0);
+		end_line = ft_find_char('\n', text, 0);
+		if (end_line == -1)
+			result = read(fd, buff, BUFFER_SIZE);
 	}
-	return (get_the_line(line, &text, -1));
+	free(buff);
+	return (get_the_line(&text, end_line));
 }
