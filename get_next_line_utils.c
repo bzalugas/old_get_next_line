@@ -6,7 +6,7 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 18:57:23 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/10/09 19:05:19 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/10/18 21:04:51 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-int		ft_find_char(char c, char *str, size_t start)
+int	ft_find_char(char c, char *str, size_t start)
 {
 	int	i;
 

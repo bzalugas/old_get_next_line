@@ -6,7 +6,7 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/26 10:32:45 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/10/13 18:00:46 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/10/18 21:03:32 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@
 # endif
 
 # define MAX_FD 65536
-
-#include <stdio.h> //to remove
 
 size_t	ft_strlen(const char *s);
 int		ft_find_char(char c, char *str);

@@ -6,7 +6,7 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/26 10:32:18 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/10/18 20:42:11 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/10/18 21:05:44 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 size_t	ft_strlen(const char *s)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (s && s[i])
@@ -22,9 +22,9 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-int		ft_find_char(char c, char *str)
+int	ft_find_char(char c, char *str)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (str && str[++i])
