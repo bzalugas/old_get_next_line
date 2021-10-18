@@ -6,7 +6,7 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/26 10:32:45 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/09/29 19:13:49 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/10/13 18:00:46 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,10 @@
 
 #include <stdio.h> //to remove
 
-size_t		ft_strlen(const char *s);
-int			ft_find_char(char c, char *str);
-size_t		ft_strlcpy(char *dst, const char *src, size_t dstsize);
+size_t	ft_strlen(const char *s);
+int		ft_find_char(char c, char *str);
+char	*ft_strjoin_free(char *s1, char *s2, int free_s1, int free_s2);
+char	*ft_substr_free(char *s, unsigned int start, size_t len, int free_s);
+char	*get_next_line(int fd);
 
 #endif

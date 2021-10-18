@@ -2,6 +2,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/emacs,c++,c
 # Edit at https://www.toptal.com/developers/gitignore?templates=emacs,c++,c
 
+### MacOs ###
+.DS_Store
+
 ### C ###
 # Prerequisites
 *.d

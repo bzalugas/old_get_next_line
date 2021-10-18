@@ -6,7 +6,7 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 13:35:13 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/07/25 12:13:51 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/10/15 19:45:58 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int		ft_memcmp(const void *s1, const void *s2, size_t n);
 int     check_delete(t_list *lst, void *p);
 void    *my_malloc(size_t size, const char *file, int line, const char *function);
 void    my_free(void *p, const char *file, int line, const char *function);
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
 
 # ifndef LEAKS_MACROS
 #  define LEAKS_MACROS

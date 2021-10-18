@@ -6,7 +6,7 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/25 17:23:12 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/10/10 20:30:12 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/10/13 17:07:09 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,6 @@ int	main(int argc, char **argv)
 		printf("%s", line);
 		free(line);
 	}
+	free(line);
 	close(fd);
 }

@@ -6,7 +6,7 @@
 /*   By: bzalugas <bzalugas@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/18 13:33:17 by bzalugas          #+#    #+#             */
-/*   Updated: 2021/07/25 12:15:47 by bzalugas         ###   ########.fr       */
+/*   Updated: 2021/10/13 18:23:08 by bzalugas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ int main(int argc, char **argv)
     printf("Contenu de %s : \n\n", name);
 	if (!fd)
 		return 1;
-	while (get_next_line(fd, &line))
+	while ((line = get_next_line(fd)))
     {
         printf("next line : %s\n", line);
         printf("%s\n", line);
